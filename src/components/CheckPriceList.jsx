@@ -148,8 +148,6 @@
 
 
 
-
-
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../client/supabaseClient';
 
@@ -161,75 +159,7 @@ function CheckPriceList() {
   const username = import.meta.env.VITE_UANZXHIOFH;
   const sign = import.meta.env.VITE_SKDAFNXIU;
 
-  useEffect(() => {
-    const updatePriceList = async () => {
-      try {
-        // Fetch data from external API
-        const response = await fetch(`${apiUrl}/price-list`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            cmd: 'prepaid',
-            username: username,
-            code: '',
-            sign: sign,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log(data);
-
-        if (Array.isArray(data.data)) {
-          const uniqueProducts = new Map();
-
-          // Filter out duplicate products
-          data.data.forEach((product) => {
-            const key = `${product.product_name}-${product.category}-${product.brand}`;
-            if (!uniqueProducts.has(key)) {
-              uniqueProducts.set(key, product);
-            }
-          });
-
-          const uniqueProductList = Array.from(uniqueProducts.values());
-
-          // Update or insert data into Supabase
-          for (const product of uniqueProductList) {
-            const { error } = await supabase.from('price_list').upsert(
-              {
-                product_name: product.product_name,
-                category: product.category,
-                brand: product.brand,
-                price: product.price,
-                description: product.desc,
-              },
-              {
-                onConflict: ['product_name', 'category', 'brand'],
-              }
-            );
-
-            if (error) {
-              console.error('Error inserting/updating data:', error.message);
-              setError(error.message);
-            }
-          }
-        } else {
-          console.error('Data received is not an array:', data.data);
-          setError('Invalid data format received');
-        }
-      } catch (error) {
-        console.error('Error fetching price list:', error);
-        setError(error.message);
-      }
-    };
-
-    updatePriceList();
-  }, [apiUrl, username, sign]);
+  
 
   // Fetch updated data from Supabase
   const fetchFromSupabase = async () => {
