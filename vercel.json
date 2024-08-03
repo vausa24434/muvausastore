@@ -1,9 +1,0 @@
-{
-    "rewrites": [
-      {
-        "source": "/api/(.*)",
-        "destination": "https://api.digiflazz.com/v1/$1"
-      }
-    ]
-  }
-  
