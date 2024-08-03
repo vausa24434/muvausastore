@@ -14,14 +14,17 @@
 //     },
 //   },
 // });
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    outDir: 'dist', // Direktori output untuk build
+    sourcemap: true, // Opsional: untuk debugging produksi
+  },
   server: {
-    port: 3000, // Mengatur port yang digunakan oleh server pengembangan
     proxy: {
       '/api': {
         target: 'https://api.digiflazz.com',
@@ -29,14 +32,5 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
-  },
-  build: {
-    outDir: 'dist', // Direktori output untuk build
-    sourcemap: true, // Menghasilkan sourcemaps untuk debugging
-  },
-  resolve: {
-    alias: {
-      '@': '/src', // Alias untuk folder src
-    },
-  },
+  }
 });
