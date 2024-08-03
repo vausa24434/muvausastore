@@ -1,215 +1,63 @@
-// import React, { useEffect, useState } from 'react';
-// import { supabase } from '../../client'; // Pastikan path ini benar
 
-// function PriceList() {
-//   const [priceList, setPriceList] = useState([]);
-//   const [error, setError] = useState(null);
+import React, { useState } from 'react';
+import axios from 'axios';
 
-//   // Akses environment variables
-//   const apiUrl = import.meta.env.VITE_ANWRNKXYIGS;
-//   const username = import.meta.env.VITE_UANZXHIOFH;
-//   const sign = import.meta.env.VITE_SKDAFNXIU;
+const apiUrl = import.meta.env.VITE_ANWRNKXYIGS;
 
-//   useEffect(() => {
-//     const fetchPriceList = async () => {
-//       try {
-//         // Fetch data from external API
-//         const response = await fetch(`${apiUrl}/price-list`, {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({
-//             cmd: 'prepaid',
-//             username: username,
-//             code: '', // Hapus jika tidak ingin mengirimkan kode produk
-//             sign: sign,
-//           }),
-//         });
-
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-
-//         const data = await response.json();
-//         console.log(data); // Log untuk melihat struktur data
-
-//         if (Array.isArray(data.data)) {
-//           const uniqueProducts = new Map();
-
-//           // Filter out duplicate products
-//           data.data.forEach((product) => {
-//             const key = `${product.product_name}-${product.category}-${product.brand}`;
-//             if (!uniqueProducts.has(key)) {
-//               uniqueProducts.set(key, product);
-//             }
-//           });
-
-//           const uniqueProductList = Array.from(uniqueProducts.values());
-//           setPriceList(uniqueProductList);
-
-//           // Perbarui atau tambahkan data ke Supabase
-//           for (const product of uniqueProductList) {
-//             const { error } = await supabase.from('price_list').upsert(
-//               {
-//                 product_name: product.product_name,
-//                 category: product.category,
-//                 brand: product.brand,
-//                 price: product.price,
-//                 description: product.desc,
-//               },
-//               {
-//                 onConflict: ['product_name', 'category', 'brand'],
-//               }
-//             );
-
-//             if (error) {
-//               console.error('Error inserting/updating data:', error.message);
-//               setError(error.message);
-//             }
-//           }
-//         } else {
-//           console.error('Data received is not an array:', data.data);
-//           setError('Invalid data format received');
-//         }
-//       } catch (error) {
-//         console.error('Error fetching price list:', error);
-//         setError(error.message);
-//       }
-//     };
-
-//     fetchPriceList();
-//   }, [apiUrl, username, sign]);
-
-//   // Fungsi untuk mengambil data dari Supabase
-//   const fetchFromSupabase = async () => {
-//     try {
-//       const { data, error } = await supabase
-//         .from('price_list')
-//         .select('*')
-//         .order('product_name', { ascending: true });
-
-//       if (error) throw error;
-
-//       setPriceList(data);
-//     } catch (error) {
-//       console.error('Error fetching price list from Supabase:', error);
-//       setError(error.message);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchFromSupabase();
-//     // Polling untuk memperbarui data setiap 10 detik
-//     const interval = setInterval(() => {
-//       fetchFromSupabase();
-//     }, 10000);
-
-//     // Cleanup interval saat komponen di-unmount
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   return (
-//     <div>
-//       <h1>Price List</h1>
-//       {error ? (
-//         <p>Error: {error}</p>
-//       ) : (
-//         <ul>
-//           {priceList.length > 0 ? (
-//             priceList.map((product, index) => (
-//               <li key={index} style={{ marginBottom: '10px' }}>
-//                 <strong>Product Name:</strong> {product.product_name}
-//                 <br />
-//                 <strong>Category:</strong> {product.category}
-//                 <br />
-//                 <strong>Brand:</strong> {product.brand}
-//                 <br />
-//                 <strong>Price:</strong> {product.price}
-//                 <br />
-//                 <strong>Description:</strong> {product.description}
-//               </li>
-//             ))
-//           ) : (
-//             <p>No products available.</p>
-//           )}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default PriceList;
-
-
-
-
-
-
-
-
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../client/supabaseClient';
-
-function CheckPriceList() {
-  const [priceList, setPriceList] = useState([]);
+const PrepaidPage = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const apiUrl = import.meta.env.VITE_ANWRNKXYIGS;
-  const username = import.meta.env.VITE_UANZXHIOFH;
-  const sign = import.meta.env.VITE_SKDAFNXIU;
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
 
-  
-
-  // Fetch updated data from Supabase
-  const fetchFromSupabase = async () => {
     try {
-      const { data, error } = await supabase
-        .from('price_list')
-        .select('*')
-        .order('product_name', { ascending: true });
+      const response = await axios.post(`${apiUrl}/price-list`, {
+        cmd: 'prepaid',
+        username: 'yitaxig4J76D',
+        code: '',
+        sign: '4c96f72a53964c6718243f913033a0b6'
+      });
 
-      if (error) throw error;
-
-      setPriceList(data);
-    } catch (error) {
-      console.error('Error fetching price list from Supabase:', error);
-      setError(error.message);
+      setData(response.data.data);
+    } catch (err) {
+      setError('Terjadi kesalahan saat memuat data.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchFromSupabase();
-  }, []);
-
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Price List</h1>
-      {error ? (
-        <p className="text-red-500">Error: {error}</p>
-      ) : (
-        <ul className="space-y-4">
-          {priceList.length > 0 ? (
-            priceList.map((product, index) => (
-              <li key={index} className="border p-4 rounded shadow">
-                <strong>Product Name:</strong> {product.product_name}
-                <br />
-                <strong>Category:</strong> {product.category}
-                <br />
-                <strong>Brand:</strong> {product.brand}
-                <br />
-                <strong>Price:</strong> {product.price}
-                <br />
-                <strong>Description:</strong> {product.description}
-              </li>
-            ))
-          ) : (
-            <p>No products available.</p>
-          )}
-        </ul>
+    <div className="p-4">
+      <button
+        onClick={fetchData}
+        className="bg-blue-500 text-white py-2 px-4 rounded"
+      >
+        Ambil Data
+      </button>
+
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {data && (
+        <div className="mt-4">
+          <h2 className="text-xl font-bold">Data Produk</h2>
+          {data.map((item, index) => (
+            <div key={index} className="border p-4 my-2 rounded">
+              <h3 className="text-lg font-semibold">{item.product_name}</h3>
+              <p><strong>Kategori:</strong> {item.category}</p>
+              <p><strong>Brand:</strong> {item.brand}</p>
+              <p><strong>Harga:</strong> Rp {item.price}</p>
+              <p><strong>Deskripsi:</strong> {item.desc}</p>
+              <p><strong>Status Produk Penjual:</strong> {item.seller_product_status ? 'Tersedia' : 'Tidak Tersedia'}</p>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
-}
+};
 
-export default CheckPriceList;
+export default PrepaidPage;
