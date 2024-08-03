@@ -49,9 +49,18 @@ const PrepaidPage = () => {
               <h3 className="text-lg font-semibold">{item.product_name}</h3>
               <p><strong>Kategori:</strong> {item.category}</p>
               <p><strong>Brand:</strong> {item.brand}</p>
-              <p><strong>Harga:</strong> Rp {item.price}</p>
-              <p><strong>Deskripsi:</strong> {item.desc}</p>
+              <p><strong>Jenis:</strong> {item.type}</p>
+              <p><strong>Penjual:</strong> {item.seller_name}</p>
+              <p><strong>Harga:</strong> {item.price}</p>
+              <p><strong>Kode SKU Pembeli:</strong> {item.buyer_sku_code}</p>
+              <p><strong>Status Produk Pembeli:</strong> {item.buyer_product_status ? 'Tersedia' : 'Tidak Tersedia'}</p>
               <p><strong>Status Produk Penjual:</strong> {item.seller_product_status ? 'Tersedia' : 'Tidak Tersedia'}</p>
+              <p><strong>Stok Tidak Terbatas:</strong> {item.unlimited_stock ? 'Ya' : 'Tidak'}</p>
+              <p><strong>Sisa Stok:</strong> {item.stock}</p>
+              <p><strong>Multi Transaksi:</strong> {item.multi ? 'Ya' : 'Tidak'}</p>
+              <p><strong>Jam Mulai Cut Off:</strong> {item.start_cut_off}</p>
+              <p><strong>Jam Akhir Cut Off:</strong> {item.end_cut_off}</p>
+              <p><strong>Deskripsi:</strong> {item.desc}</p>
             </div>
           ))}
         </div>
