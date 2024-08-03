@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const apiUrl = import.meta.env.VITE_ANWRNKXYIGS;
+const username = import.meta.env.VITE_UANZXHIOFH;
+const sign = import.meta.env.VITE_SKDAFNXIU;
 
 const PrepaidPage = () => {
   const [data, setData] = useState(null);
@@ -16,9 +18,9 @@ const PrepaidPage = () => {
     try {
       const response = await axios.post(`${apiUrl}/price-list`, {
         cmd: 'prepaid',
-        username: 'yitaxig4J76D',
+        username: username,
         code: '',
-        sign: '4c96f72a53964c6718243f913033a0b6'
+        sign: sign
       });
 
       setData(response.data.data);
