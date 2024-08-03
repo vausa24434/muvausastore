@@ -15,7 +15,7 @@ function App() {
         <Route path="/pricelist" element={<Pricelist />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/check-price-list" element={<CheckPriceList />} />
-          <Route path="/" element={<ProductList />} /> {/* Halaman default */}
+          <Route path="/" element={<Pricelist />} /> {/* Halaman default */}
         </Routes>
       </div>
     </Router>
