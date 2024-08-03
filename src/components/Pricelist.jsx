@@ -11,7 +11,7 @@ const Pricelist = () => {
     setLoading(true);
     setError(null);
     
-    console.log("Fetching data from:", apiUrl); // Tambahkan log ini
+    console.log("Fetching data from:"); // Tambahkan log ini
 
     try {
       const response = await axios.post(`https://api.digiflazz.com/v1/price-list`, {
